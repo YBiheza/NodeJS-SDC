@@ -34,11 +34,12 @@ fastify.post('/orderpizza', {
     }
 }, orderPizza)
 fastify.get('/order', getOrder)
+
 try {
   await fastify.listen({ port: 3000 })
-} catch (err) {
-  fastify.log.error(err)
-  process.exit(1)
-}
+  } catch (err) {
+      fastify.log.error(err)
+      process.exit(1)
+  }
 
 export default fastify

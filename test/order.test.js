@@ -21,3 +21,16 @@ test('should reply with 400', async () => {
 
     assert.strictEqual(response.statusCode, 400)
 });
+
+test('should reply with 200', async () => {
+    const response = await request (fastify.server)
+    .get('/health')
+
+    assert.strictEqual(response.statusCode, 200);
+
+    assert.strictEqual(response.text, 'OK');
+
+})
+
+//в разные файлы
+//обещание, что тебе вернут значение
