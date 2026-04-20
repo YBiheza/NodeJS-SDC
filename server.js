@@ -1,7 +1,7 @@
 import Fastify from 'fastify'
 import { registerHealthCheckController } from './src/controllers/HealthCheckController.js'
-import { orderPizza } from './src/controllers/PizzaOrderingController.js'
-import { getOrder } from './src/controllers/PizzaOrderingController.js'
+import { getProducts } from './src/controllers/PizzaProductionController.js'
+import { putProducts } from './src/controllers/PizzaProductionController.js'
 
 const fastify = Fastify({
   logger: true
@@ -11,20 +11,14 @@ fastify.get('/', async function handler (request, reply) {
   return { hello: 'world' }
 })
 
-const orders = [];
-
 fastify.get('/health', registerHealthCheckController);
-fastify.post('/orderpizza', {
+fastify.post('/getproducts', {
     schema: {
         body: {
             type: 'object',
-            required: ['pizzaName', 'pizzaSize', 'quantity'], 
+            required: ['product', 'quantity'], 
             properties: {
-                pizzaName: {type: 'string'},
-                pizzaSize: {
-                    type: 'string',
-                    enum: ['small', 'medium', 'large']
-                },
+                product: {type: 'string'},
                 quantity: {
                     type: 'number',
                     minimum: 1
@@ -32,13 +26,7 @@ fastify.post('/orderpizza', {
             }
         }
     }
-}, orderPizza)
-fastify.get('/order', getOrder)
-try {
-  await fastify.listen({ port: 3000 })
-} catch (err) {
-  fastify.log.error(err)
-  process.exit(1)
-}
+}, getProducts)
+fastify.get('/putproducts', putProducts)
 
 export default fastify
