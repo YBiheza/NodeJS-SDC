@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert';
 import request from 'supertest';
-import fastify from '../server.js';
+import fastify from '../../server.js';
 
 test('should reply with 200', async () => {
     const response = await request(fastify.server)
