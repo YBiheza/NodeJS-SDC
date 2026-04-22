@@ -10,7 +10,6 @@ export class ShipmentRepository {
         ingredients: IIngredient[],
         date: Date,
     }) {
-        console.log("DB INSERT INPUT:", shipment)
         const results = []
         for (const ingred of shipment.ingredients) {
             const result = await db 

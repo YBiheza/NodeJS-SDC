@@ -44,7 +44,6 @@ try {
   fastify.log.error(err)
   process.exit(1)
 }*/
-console.log("🔥 SERVER STARTED")
 const repo = new ShipmentRepository()
 const service = new ShipmentService(repo)
 const shController = new ShipmentController(service)
