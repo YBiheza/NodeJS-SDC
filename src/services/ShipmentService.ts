@@ -129,7 +129,6 @@ export class ShipmentService {
             }
         }
         const saved = await this.repo.createShipment(shipment)
-        console.log('service result:', saved)
         return saved
     }
 
