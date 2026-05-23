@@ -1,8 +1,8 @@
 import type { IOrder } from "../interfaces/IOrder"
 import type { IHours } from "../interfaces/IHours"
 import type { IStrategy } from "../interfaces/IStrategy"
-import { db } from '../db'
-import { orders } from '../db/schema'
+import { db } from '../db/schema'
+import { orders } from '../db/schema/schemaOrder'
 import { OrderRepository } from "../repositories/OrderRepository"
 
 export type TCountry = 'US' | 'LT' | 'BY' | 'DE'
@@ -29,7 +29,7 @@ const principalCost = {
 }
 
 function isCountry(country: string): country is TCountry {
-  return country in pickHours
+    return country in pickHours
 }
 
 
@@ -60,7 +60,7 @@ function checkTotalSum (sum: number, country: TCountry) {
     return (sum > loc.price) 
 }
 
-class PickDiscount {
+export class PickDiscount {
     calculate(order: IOrder) {
         const loc = pickHours[order.country]
         if (!checkPickHours(order.date, order.country)) {
@@ -70,7 +70,7 @@ class PickDiscount {
     }
 }
 
-class TotalDiscount {
+export class TotalDiscount {
     calculate(order: IOrder) {
         const loc = principalCost[order.country]
         if (checkTotalSum(order.price, order.country)) {
@@ -80,10 +80,10 @@ class TotalDiscount {
     }
 }
 
-class DiscountStrategy {
-  calculate(order: IOrder) {
-    return 0
-  }
+export class DiscountStrategy {
+    calculate(order: IOrder) {
+        return 0
+    }
 }
 
 export class OrderService {
@@ -94,10 +94,7 @@ export class OrderService {
             new PickDiscount(),
             new TotalDiscount()
         ]
-    }
-    
-    //private orderRepository = new OrderRepository()
-    
+    }    
 
     async placeOrder(orderData: IOrder) {
         if (!checkWorkHours(orderData.date, orderData.country)) {

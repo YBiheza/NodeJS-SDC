@@ -1,5 +1,5 @@
 {
-  "id": "67bc2947-3025-4f16-8a2f-998365dffa14",
+  "id": "40bd68be-e764-47f4-8cc3-cf6661a40974",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -14,15 +14,15 @@
           "primaryKey": true,
           "notNull": true
         },
-        "items": {
-          "name": "items",
+        "item": {
+          "name": "item",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "totalPrice": {
           "name": "totalPrice",
-          "type": "integer",
+          "type": "real",
           "primaryKey": false,
           "notNull": true
         },
@@ -40,7 +40,56 @@
         },
         "discount": {
           "name": "discount",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "finalPrice": {
+          "name": "finalPrice",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.shipments": {
+      "name": "shipments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "targetWarehouse": {
+          "name": "targetWarehouse",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ingredient_id": {
+          "name": "ingredient_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unit": {
+          "name": "unit",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         }

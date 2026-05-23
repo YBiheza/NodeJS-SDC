@@ -1,4 +1,4 @@
-import { db } from './index'
+import { db } from './schema/index'
 
 async function test() {
   try {

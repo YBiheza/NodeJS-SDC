@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1776106478983,
-      "tag": "0000_sleepy_killmonger",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1776112239331,
-      "tag": "0001_narrow_shatterstar",
+      "when": 1779542108823,
+      "tag": "0000_icy_maximus",
       "breakpoints": true
     }
   ]

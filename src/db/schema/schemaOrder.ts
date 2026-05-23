@@ -4,7 +4,7 @@ import { InferSelectModel } from 'drizzle-orm'
 export const orders = pgTable('orders', {
   id: serial('id').primaryKey(),
 
-  item: text('item').array().notNull(),
+  item: text('item').notNull(),
 
   totalPrice: real('totalPrice').notNull(),
 

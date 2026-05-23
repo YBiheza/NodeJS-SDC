@@ -2,7 +2,10 @@ import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/node-postgres'
 //import pkg from 'pg'
 import { Pool } from 'pg'
-import { orders } from './schema'
+//import { orders } from './schemaOrder'
+//import { shipments } from './schemaShipment'
+export * from './schemaOrder'
+export * from './schemaShipment'
 
 /*const { Pool } = pkg
 

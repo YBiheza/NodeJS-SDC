@@ -1,5 +1,5 @@
-import { db } from "../db";
-import { orders } from "../db/schema";
+import { db } from "../db/schema";
+import { orders } from "../db/schema/schemaOrder";
 import { eq } from 'drizzle-orm'
 
 export class OrderRepository {
@@ -11,14 +11,22 @@ export class OrderRepository {
         discount: number,
         finalPrice: number,
     }) {
-                {
+        const arr = []
+        for (const i of order.item) {
             const result = await db
-                .insert(orders)
-                .values(order)
-                .returning()
-
-            return result[0] 
+            .insert(orders)
+            .values({
+                item: i,
+                totalPrice: order.totalPrice,
+                country: order.country,
+                date: order.date,
+                discount: order.discount,
+                finalPrice: order.finalPrice,
+            })
+            .returning()
+            arr.push(result[0])
         }
+        return arr
     }
 
     async getOrderById(id: number) {
@@ -36,8 +44,8 @@ export class OrderRepository {
         const result = await db
         .select()
         .from(orders)
-        if(result[0] === undefined) {
-            throw new Error('no order with such id')
+        if (result.length === 0) {
+            throw new Error ('The DB is empty')
         }
         return result
     }
@@ -48,10 +56,9 @@ export class OrderRepository {
         .where(eq(orders.id, id))
         .returning()
 
-    if (result.length === 0) {
-        throw new Error('Order not found')
+    if (result[0] === undefined) {
+        throw new Error('no order with such id')
     }
-
     return result[0]
     }
 }

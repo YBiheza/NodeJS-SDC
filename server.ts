@@ -3,7 +3,7 @@ import { OrderService } from './src/services/OrderService'
 import type { IOrder } from './src/interfaces/IOrder'
 import 'dotenv/config'
 import { OrderRepository } from './src/repositories/OrderRepository'
-
+import { OrderController } from './src/controllers/PizzaOrderingController'
 const fastify = Fastify({
   logger: true
 })
@@ -43,24 +43,39 @@ try {
 }*/
 const repo = new OrderRepository()
 const service = new OrderService(repo)
+const orderController = new OrderController(service)
 
-const order: IOrder = {
-  item: [],
-  country: 'BY',
-  date: new Date('2026-04-08T15:30:00'),
-  price: 501,
+fastify.post('/orderpizza', {
+    schema: {
+        body: {
+            type: 'object',
+            required: ['item', 'country', 'price', 'date'], 
+            properties: {
+              item: {
+                  type: 'array',
+                  items: {
+                      type: 'string'
+                  }
+              },
+              country: {
+                    type: 'string',
+                    enum: ['US', 'LT', 'BY', 'DE']
+                },
+              price: {
+                type: 'number',
+              },
+              date: { type: 'string', format: 'date-time'}
+            }
+        }
+    }
+}, async (req, res) => {
+    return orderController.create(req, res)
+  })
+try {
+  fastify.listen({ port: 3000 })
+} catch (err) {
+  fastify.log.error(err)
+  process.exit(1)
 }
-const id = 1
-async function run () {
-  //const result = await service.placeOrder(order)
-  const resById = await service.GetOrderById(id)
-  const allItems = await service.GetAll()
-  console.log('Used order ', order)
-  //console.log('result from DB (added)', result)
-  console.log('result by ID from DB ', resById)
-  for (const item of allItems) {
-    console.log(`item ${item.id}`, item)
-  }
-}
-run() 
+
 export default fastify
