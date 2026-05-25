@@ -1,11 +1,22 @@
-import { orders } from "../orders/orders.js"
+import { OrderService } from "../services/OrderService"
 
-export function orderPizza (request, reply) {
-    const order = request.body
-    orders.push(order)
-    return reply.send(order)
-}
+export class OrderController {
+    constructor(private service: OrderService) {}
 
-export function getOrder(request, reply) {
-    return reply.send(orders)
+    async create (req: any, reply: any) {
+        try {
+            const payload = {
+                ...req.body,
+                date: new Date(req.body.date)
+            }
+            const result = await this.service.placeOrder(payload)
+            return reply.send(result)
+        } catch (e: any) {
+            req.log?.error(e)
+
+            return reply.status(500).send({
+            error: e.message
+            })
+        }
+    }
 }

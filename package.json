@@ -11,12 +11,32 @@
     "drizzle-kit": "^0.31.10",
     "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
-    "typescript": "^6.0.3",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2",
     "vitest": "^4.1.4"
+  },
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
   },
   "scripts": {
     "dev": "ts-node server.ts",
     "test": "vitest",
-    "test:run": "vitest run"
-  }
+    "coverage": "vitest run --coverage",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YBiheza/NodeJS-SDC.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YBiheza/NodeJS-SDC/issues"
+  },
+  "homepage": "https://github.com/YBiheza/NodeJS-SDC#readme"
 }
