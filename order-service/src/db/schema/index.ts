@@ -9,12 +9,6 @@ export * from '../../../../shipment-service/src/db/schema'
 export * from '../../../../production-service/src/db/schema'
 export * from './schemaPizza'
 
-/*const { Pool } = pkg
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-})*/
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })
