@@ -1,0 +1,10 @@
+{
+  "name": "@pizza/api-contract",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "private": true,
+  "types": "index.ts",
+    "scripts": {
+    "dev": "ts-node src/server.ts"
+  }
+}

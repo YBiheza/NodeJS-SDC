@@ -1,4 +1,12 @@
 {
+  "private": true,
+
+  "workspaces": [
+    "packages/*",
+    "production-service",
+    "order-service"
+  ],
+
   "dependencies": {
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
@@ -23,10 +31,12 @@
     "test": "test"
   },
   "scripts": {
-    "dev": "ts-node server.ts",
+    "dev": "ts-node src/server.ts",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev:production": "npm run dev --workspace=production-service",
+    "dev:ordering": "npm run dev --workspace=order-service"
   },
   "repository": {
     "type": "git",

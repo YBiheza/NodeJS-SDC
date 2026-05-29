@@ -1,0 +1,11 @@
+{
+  "name": "order-service",
+  "version": "1.0.0",
+    "scripts": {
+    "dev": "ts-node src/server.ts"
+  },
+  "dependencies": {
+    "fastify": "^5.0.0",
+    "@pizza/api-contract": "*"
+  }
+}
