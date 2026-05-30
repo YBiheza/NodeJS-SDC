@@ -1,7 +1,8 @@
-import type { PizzaOrder, AvailabilityRequest } from '@pizza/api-contract'
+import type { AvailabilityRequest, DataBaseResponse, MarkOrderReadyRequest } from '@pizza/api-contract'
 import type { TPizza } from '@pizza/api-contract/shared types/TPizza'
 import { ProductionRepository } from '../repositories/ProductionRepository'
 import type { IPizzaIngredients } from '../interfaces/IIngredients'
+import { OrderingClient } from '../clients/OrderClient'
 
 const recipes: Record<TPizza, IPizzaIngredients> = {
   Margarita: {
@@ -48,8 +49,7 @@ const recipes: Record<TPizza, IPizzaIngredients> = {
 }
 
 export class ProductionService {
-
-  constructor (private productionRepository: ProductionRepository) {}
+  constructor (private readonly productionRepository: ProductionRepository) {}
 
   async checkAvailability(data: AvailabilityRequest) {
     const recipe = recipes[data.type]
@@ -57,10 +57,9 @@ export class ProductionService {
     for (const ingredient in recipe) {
       const key = ingredient as keyof IPizzaIngredients
 
-
       const needed = (recipe[key] ?? 0) * data.amount
 
-      const stock = await this.productionRepository.getIngrByName(ingredient)
+      const stock = await this.productionRepository.getIngredientByName(ingredient)
 
       if(!stock) {
         return false
@@ -70,28 +69,17 @@ export class ProductionService {
         return false
       }
     }
-
     return true
   }
 
-  async produce(data: PizzaOrder) {
-    //const check = this.checkAvailability(data)
+  private readonly orderClient = new OrderingClient
 
-    /*if (!check) {
-      throw new Error ('Can not make pizza - no ingredients')
-    } else {
-      console.log('➡️ CALLING AVAILABILITY CHECK', data)*/
-      await fetch('http://localhost:3001/orders/ready', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: data.type,
-          amount: data.amount
-        }),
-      })
-      console.log('⬅️ AVAILABILITY RAW RESPONSE')
-    //}
+  async produce(data: DataBaseResponse) {
+    const readyRequest: MarkOrderReadyRequest = {
+      type: data.type,
+      amount: data.amount,
+    }
+    const res = await this.orderClient.MarkAsReady(readyRequest)
+    return res
   }
 }

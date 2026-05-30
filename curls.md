@@ -45,3 +45,6 @@ $ curl -X POST http://localhost:3000/produce -H "Content-Type: application/json"
   "amount": 4
 }'
 {"success":true}
+
+ACTUAL CURL
+$ curl -X POST http://localhost:3001/orders -H "Content-Type: application/json" -d '{"type": "Margarita", "amount": 3}'

@@ -1,19 +1,22 @@
 import { ProductionService } from "../services/PizzaProductionService.js"
+import { AvailabilityResponse, MarkOrderReadyResponse } from "@pizza/api-contract"
 
 export class ProductionController {
-  constructor(private service: ProductionService) {}
+  constructor(private readonly productionService: ProductionService) {}
 
-  async create(req: any, reply: any) {
-    try {
-      const result = await this.service.produce(req.body)
-      return reply.send(result)
+  async CheckingAvailability(req: any, reply: any): Promise<AvailabilityResponse> {
+    const availability = await this.productionService.checkAvailability(req.body)
+      
+    return reply.send({
+      available: availability,
+    } satisfies AvailabilityResponse)
+  }
 
-    } catch (e: any) {
-        req.log?.error(e)
-
-        return reply.status(500).send({
-        error: e.message
-      })
-    }
+  async producePizza(req: any, reply: any): Promise<MarkOrderReadyResponse> {
+    const result = await this.productionService.produce(req.body)
+    return reply.send ({
+      success: true,
+      pizza: result
+    })
   }
 }

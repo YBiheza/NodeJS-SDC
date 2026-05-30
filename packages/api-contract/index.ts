@@ -14,15 +14,15 @@ export interface AvailabilityResponse {
 }
 
 export interface MarkOrderReadyRequest {
-  type: TPizza
+  type: string,
   amount: number
 }
 
 export interface DataBaseResponse {
-  id: number,
+  id?: number,
   type: string,
   amount: number,
-  status: string
+  status?: string
 }
 export interface MarkOrderReadyResponse {
   success: boolean
