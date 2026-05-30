@@ -1,7 +1,7 @@
 import { db } from "../db/schema";
 import { pizzas } from "../db/schema/schemaPizza";
 import { eq, and, ne } from 'drizzle-orm'
-import type { MarkOrderReadyRequest, MarkOrderReadyResponse, PizzaOrder } from '@pizza/api-contract/index'
+import type { DataBaseResponse, MarkOrderReadyRequest, PizzaOrder } from '@pizza/api-contract/index'
 
 export class OrderPizzaRepository {
 
@@ -31,7 +31,7 @@ export class OrderPizzaRepository {
     return result[0]
   }
 
-  async markAsReady(data: MarkOrderReadyRequest) {
+  async markAsReady(data: MarkOrderReadyRequest): Promise<DataBaseResponse[]> {
 
     return await db
       .update(pizzas)

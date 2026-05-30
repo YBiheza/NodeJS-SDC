@@ -1,22 +1,32 @@
 import { OrderPizzaRepository } from '../repositories/OrderPizzaRepository'
-import type { PizzaOrder, DataBaseResponse, MarkOrderReadyRequest } from '@pizza/api-contract/index'
+import type { PizzaOrder, MarkOrderReadyRequest, MarkOrderReadyResponse } from '@pizza/api-contract/index'
 import { ProductionClient } from '../clients/ProductionClient'
 
 export class OrderPizzaService {
-  constructor(private repo: OrderPizzaRepository,
-  private productionClient: ProductionClient
+  constructor(private readonly orderRepo: OrderPizzaRepository,
+  private readonly productionClient: ProductionClient
 ) {}
   
-  async RegisterPizza (pizza: PizzaOrder): Promise<DataBaseResponse> {
+  async RegisterPizza (pizza: PizzaOrder): Promise<MarkOrderReadyResponse> {
 
-    const newPizza = await this.repo.create(pizza)
+    const response = await this.productionClient.CheckAvailability(pizza)
+
+      if (!response.available) {
+        throw new Error ('Not enough ingredients')
+      }
+
+    const newPizza = await this.orderRepo.create(pizza)
+    
     if (!newPizza) {
       throw new Error('Pizza was not created')
     }
-    return newPizza
+
+    const isReady = await this.productionClient.MakePizza(newPizza)
+
+    return isReady
   }
 
   async updateOrder(data: MarkOrderReadyRequest) {
-    return await this.repo.markAsReady(data)
+    return await this.orderRepo.markAsReady(data)
   }
 }

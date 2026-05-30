@@ -1,19 +1,19 @@
+import { DataBaseResponse } from "@pizza/api-contract"
 import { OrderPizzaService } from "../services/OrderPizzaService"
 
 export class OrderPizzaController {
-  constructor(private service: OrderPizzaService) {}
+  constructor (private readonly orderPizzaService: OrderPizzaService) {}
 
-  async create(req: any, reply: any) {
-    try {
-      const result = await this.service.RegisterPizza(req.body)
-      return reply.send(result)
+  async RegisterNewPizza (req: any, reply: any): Promise<DataBaseResponse> {
+    const order = await this.orderPizzaService.RegisterPizza(req.body)
 
-    } catch (e: any) {
-        req.log?.error(e)
+    return reply.send({
+      order,
+    })
+  }
 
-        return reply.status(500).send({
-        error: e.message
-      })
-    }
+  async UpdateStatus (req: any, reply: any): Promise<DataBaseResponse[]> {
+    const readyPizza = await this.orderPizzaService.updateOrder(req.body)
+    return readyPizza
   }
 }

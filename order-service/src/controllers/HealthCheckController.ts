@@ -1,3 +1,3 @@
-export function registerHealthCheckController(request, reply) {
+export function registerHealthCheckController(request: any, reply: any) {
     return reply.send('OK');
 }

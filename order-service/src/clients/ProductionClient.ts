@@ -12,9 +12,6 @@ export class ProductionClient {
                 amount: pizza.amount
             } satisfies AvailabilityRequest),
         })
-        /*const raw = await response.text()
-        console.log('RAW RESPONSE:', raw)
-        return JSON.parse(raw) as AvailabilityResponse*/
         return await response.json() as AvailabilityResponse
     }
 
