@@ -1,7 +1,7 @@
 import { db } from "../db/schema";
 import { pizzas } from "../db/schema/schemaPizza";
-import { eq, and } from 'drizzle-orm'
-import type { PizzaOrder } from '@pizza/api-contract/index'
+import { eq, and, ne } from 'drizzle-orm'
+import type { MarkOrderReadyRequest, MarkOrderReadyResponse, PizzaOrder } from '@pizza/api-contract/index'
 
 export class OrderPizzaRepository {
 
@@ -31,21 +31,12 @@ export class OrderPizzaRepository {
     return result[0]
   }
 
-  async getReady() {
-    const result = await db
-      .select()
-      .from(pizzas)
-      .where(eq(pizzas.status, 'ready'))
-
-      return result
-  }
-
-  async markAsReady(data: PizzaOrder) {
+  async markAsReady(data: MarkOrderReadyRequest) {
 
     return await db
       .update(pizzas)
       .set({ status: 'ready' })
-      .where(and(eq(pizzas.type, data.type), eq(pizzas.amount, data.amount)))
+      .where(and(eq(pizzas.type, data.type), eq(pizzas.amount, data.amount), ne(pizzas.status, 'ready')))
       .returning()
   }
 }

@@ -1,1 +1,0 @@
-export type TStatus = 'accepted' | 'in process' | 'ready' | 'decline' | 'pending'

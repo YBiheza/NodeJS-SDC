@@ -16,14 +16,4 @@ export class OrderPizzaController {
       })
     }
   }
-
-  async getAll(req: any, reply: any) {
-    const result = await this.service.getAllOrders()
-    return reply.send(result)
-  }
-
-  async getUpdate(req: any, reply: any) {
-    const res = await this.service.updateOrder(req.body)
-    return reply.send(res)
-  }
 }
