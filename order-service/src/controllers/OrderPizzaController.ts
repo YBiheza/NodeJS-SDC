@@ -1,4 +1,4 @@
-import { DataBaseResponse } from "@pizza/api-contract"
+import { DataBaseResponse, DeletedOrder } from "@pizza/api-contract"
 import { OrderPizzaService } from "../services/OrderPizzaService"
 
 export class OrderPizzaController {
@@ -12,8 +12,13 @@ export class OrderPizzaController {
     })
   }
 
-  async UpdateStatus (req: any, reply: any): Promise<DataBaseResponse[]> {
+  async UpdateStatus (req: any, reply: any): Promise<DataBaseResponse> {
     const readyPizza = await this.orderPizzaService.updateOrder(req.body)
     return readyPizza
+  }
+
+  async DeleteOrder (req: any, reply: any): Promise<boolean> {
+    const deleted = await this.orderPizzaService.deleteOrder(req.body)
+    return deleted
   }
 }

@@ -2,9 +2,11 @@ import 'dotenv/config'
 import Fastify from 'fastify'
 import { OrderPizzaRepository } from './repositories/OrderPizzaRepository'
 import { OrderPizzaService } from './services/OrderPizzaService'
-import { MarkOrderReadyResponse } from '@pizza/api-contract'
+import { DataBaseResponse, DeletedOrder, MarkOrderReadyResponse } from '@pizza/api-contract'
 import { ProductionClient } from './clients/ProductionClient'
 import { OrderPizzaController } from './controllers/OrderPizzaController'
+import { Neo4jService } from '../../neo4j/neo4j.service'
+import { request } from 'node:http'
 
 const fastify = Fastify({
   logger: true
@@ -14,8 +16,9 @@ fastify.get('/', async function handler (request, reply) {
   return { hello: 'world' }
 })
 
+const neo = new Neo4jService()
 const prodClient = new ProductionClient()
-const orderPizzaRepo = new OrderPizzaRepository()
+const orderPizzaRepo = new OrderPizzaRepository(neo)
 const orderPizzaService = new OrderPizzaService(orderPizzaRepo, prodClient)
 const orderPizzaController = new OrderPizzaController(orderPizzaService)
 
@@ -47,6 +50,14 @@ fastify.patch('/orders/ready', async (request, reply) => {
     success: true,
     pizza: result,
   } satisfies MarkOrderReadyResponse)
+})
+
+fastify.delete('/deleting', async (request, reply) => {
+  const answer = await orderPizzaController.DeleteOrder(request, reply)
+
+  return reply.send({
+    success: answer, 
+  } satisfies DeletedOrder )
 })
 
 fastify.listen({ port: 3001 }).catch((err) => {

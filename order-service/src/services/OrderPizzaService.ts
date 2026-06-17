@@ -1,5 +1,5 @@
 import { OrderPizzaRepository } from '../repositories/OrderPizzaRepository'
-import type { PizzaOrder, MarkOrderReadyRequest, MarkOrderReadyResponse } from '@pizza/api-contract/index'
+import type { PizzaOrder, MarkOrderReadyRequest, MarkOrderReadyResponse, DataBaseResponse, DataBaseRequest } from '@pizza/api-contract/index'
 import { ProductionClient } from '../clients/ProductionClient'
 
 export class OrderPizzaService {
@@ -12,13 +12,13 @@ export class OrderPizzaService {
     const response = await this.productionClient.CheckAvailability(pizza)
 
       if (!response.available) {
-        throw new Error ('Not enough ingredients')
+        throw new Error ('OrderService: not enough ingredients')
       }
 
     const newPizza = await this.orderRepo.create(pizza)
     
     if (!newPizza) {
-      throw new Error('Pizza was not created')
+      throw new Error('OrderService: pizza was not created')
     }
 
     const isReady = await this.productionClient.MakePizza(newPizza)
@@ -28,5 +28,9 @@ export class OrderPizzaService {
 
   async updateOrder(data: MarkOrderReadyRequest) {
     return await this.orderRepo.markAsReady(data)
+  }
+
+  async deleteOrder(data: DataBaseRequest) {
+    return await this.orderRepo.delete(data)
   }
 }

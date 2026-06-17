@@ -24,7 +24,19 @@ export interface DataBaseResponse {
   amount: number,
   status?: string
 }
+
+export interface DataBaseRequest {
+  id?: number,
+  type: string,
+  amount: number,
+  status?: string
+}
+
 export interface MarkOrderReadyResponse {
   success: boolean
-  pizza: DataBaseResponse[]
+  pizza: DataBaseResponse
+}
+
+export interface DeletedOrder {
+  success: boolean
 }

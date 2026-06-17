@@ -4,7 +4,7 @@ import { ProductionRepository } from '../repositories/ProductionRepository'
 import type { IPizzaIngredients } from '../interfaces/IIngredients'
 import { OrderingClient } from '../clients/OrderClient'
 
-const recipes: Record<TPizza, IPizzaIngredients> = {
+/*const recipes: Record<TPizza, IPizzaIngredients> = {
   Margarita: {
     cheese: 2,
     tomatoes: 5,
@@ -46,30 +46,27 @@ const recipes: Record<TPizza, IPizzaIngredients> = {
     cheese: 4,
     kari: 2,
   }
-}
+}*/
 
 export class ProductionService {
   constructor (private readonly productionRepository: ProductionRepository) {}
 
   async checkAvailability(data: AvailabilityRequest) {
-    const recipe = recipes[data.type]
+    const recipe = await this.productionRepository.getRecipe(data.type)
 
-    for (const ingredient in recipe) {
-      const key = ingredient as keyof IPizzaIngredients
+    if (recipe.length === 0) {
+      return false;
+    } 
 
-      const needed = (recipe[key] ?? 0) * data.amount
+    for (const ingredient of recipe) {
+      const needed = ingredient.required * data.amount
+      console.log(`We have: ${ingredient.ingredient}, ${ingredient.stock} \n and we need amount ${needed}`)
 
-      const stock = await this.productionRepository.getIngredientByName(ingredient)
-
-      if(!stock) {
-        return false
-      }
-
-      if(stock.amount < needed) {
+      if (needed > ingredient.stock) {
         return false
       }
     }
-    return true
+    return true;
   }
 
   private readonly orderClient = new OrderingClient

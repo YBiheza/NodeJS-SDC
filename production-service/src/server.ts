@@ -5,6 +5,7 @@ import { ProductionService } from './services/PizzaProductionService'
 import { ProductionRepository } from './repositories/ProductionRepository'
 import { ProductionController } from './controllers/PizzaProductionController'
 import { AvailabilityResponse } from '@pizza/api-contract'
+import { Neo4jService } from '../../neo4j/neo4j.service'
 
 const fastify = Fastify({
   logger: true
@@ -14,7 +15,8 @@ fastify.get('/', async function handler (request: FastifyRequest, reply: Fastify
   return { hello: 'world' }
 })
 
-const productionRepo = new ProductionRepository()
+const neo = new Neo4jService()
+const productionRepo = new ProductionRepository(neo)
 const productionService = new ProductionService(productionRepo)
 const productionController = new ProductionController(productionService)
 
