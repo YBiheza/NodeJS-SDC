@@ -21,7 +21,7 @@ export class OrderPizzaRepository {
         type: $type
       })
 
-      MERGE (o)-[:CONTAINS]->(p)
+      MERGE (o)-[:CONTAINS {amount: $amount}]->(p)
       RETURN 
       o.type AS type,
       o.amount AS amount,
