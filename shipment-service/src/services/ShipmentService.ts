@@ -6,6 +6,7 @@ import type { TStrategy } from "../types/TStrategy"
 import type { IShipmentStrategy } from "../interfaces/IShipmentStrategy"
 import { ShipmentRepository } from "../repositories/ShipmentRepository"
 import { calculateAmountOfFullBatches, calculateSizeOfIncompleteBatch } from "../algorythms/splittingShipment"
+
 const warehouses: Record <TWarehouse, IHours> = {
     south: {start: 8, finish: 16},
     north: {start: 10, finish: 18},
@@ -104,9 +105,9 @@ export class WorkHoursStrategy implements IShipmentStrategy{
 }
 
 export class ShipmentService {
-    private strategies: IShipmentStrategy[]
+    private readonly strategies: IShipmentStrategy[]
 
-    constructor (private repo: ShipmentRepository) {
+    constructor (private readonly repo: ShipmentRepository) {
         this.strategies = [
             new WorkHoursStrategy(),
             new CapacityStrategy()
@@ -128,6 +129,7 @@ export class ShipmentService {
                 }
             }
         }
+        
         const saved = await this.repo.createShipment(shipment)
         return saved
     }
@@ -143,8 +145,11 @@ export class ShipmentService {
     }
 
     async deleteShipment (id: number) {
-        await this.repo.deleteById(id) 
+        return await this.repo.deleteById(id) 
+    }
 
+    async deleteExpired () {
+        return await this.repo.deleteExpired()
     }
 }
 
