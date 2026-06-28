@@ -1,0 +1,1 @@
+export type TPizza = 'Margarita' | 'Four_seasons' | 'Vegetarian' | 'Meat_and_mushrooms' | 'Chicken_kari'
