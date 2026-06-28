@@ -55,7 +55,7 @@ async function startApp () {
   await registerWorker();
   console.log("Worker started");
 
-  cron.schedule('24 21 * * *', async () => {
+  cron.schedule('0 0 * * *', async () => {
     await pgboss.send('delete-shipments', {});
   }); 
 
