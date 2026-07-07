@@ -9,7 +9,7 @@ export class OrderPizzaController {
 
     return reply.send({
       order,
-    })
+    }) 
   }
 
   async UpdateStatus (req: any, reply: any): Promise<DataBaseResponse[]> {

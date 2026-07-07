@@ -1,6 +1,6 @@
 import { db } from "../db/schema";
 import { shipments } from "../db/schema";
-import { eq } from 'drizzle-orm'
+import { eq, lt } from 'drizzle-orm'
 import { TWarehouse } from "../types/TWarehouse";
 import { IIngredient } from "../interfaces/IIngredients";
 
@@ -57,5 +57,22 @@ export class ShipmentRepository {
             throw new Error('no order with such id')
         }
         return res[0]
+    }
+
+    async deleteExpired (): Promise<number> {
+        const dateOfExpiration = new Date();
+
+        dateOfExpiration.setDate(dateOfExpiration.getDate()-7)
+        console.log('Delete everything before:', dateOfExpiration);
+
+        const res = await db    
+        .delete(shipments)
+        .where(lt(shipments.date, dateOfExpiration))
+        .returning({id: shipments.id})
+        if (res.length === 0) {
+            console.log('ShipmentsRepo: no expired order, congrats!')
+        }
+        console.log("Deleted:", res);
+        return res.length
     }
 }

@@ -7,6 +7,8 @@ export const pizzas = pgTable('pizzas', {
     type: text('type').notNull(),
     amount: integer('amount').notNull(),
 
-    status: text('status').notNull()
+    status: text('status').notNull(),
+
+    timeOrder: timestamp('timeorder').notNull()
 }) 
 
