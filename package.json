@@ -3,7 +3,8 @@
   "workspaces": [
     "packages/*",
     "production-service",
-    "order-service"
+    "order-service",
+    "shipment-service"
   ],
   "dependencies": {
     "dotenv": "^17.4.2",

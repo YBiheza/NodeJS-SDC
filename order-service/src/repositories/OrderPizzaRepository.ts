@@ -11,7 +11,8 @@ export class OrderPizzaRepository {
       .values({
         type: data.type,
         amount: data.amount,
-        status: 'in process'
+        status: 'in process',
+        timeOrder: new Date()
       })
       .returning()
 
@@ -35,8 +36,17 @@ export class OrderPizzaRepository {
 
     return await db
       .update(pizzas)
-      .set({ status: 'ready' })
+      .set({ status: 'in process' }) //ранее этот метод помечал заказы ready, нов таком случае у меня не  было не готовых заказов в БД для этого ДЗ. Поэтому я изменила метод и он оставляет заказ "in process" 
       .where(and(eq(pizzas.type, data.type), eq(pizzas.amount, data.amount), ne(pizzas.status, 'ready')))
       .returning()
+  }
+
+  async markOld(id: number) {
+    return db
+      .update(pizzas)
+      .set({
+        status: 'stale',
+      })
+      .where(eq(pizzas.id, id));
   }
 }
